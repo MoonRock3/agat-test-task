@@ -2,14 +2,19 @@ import { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './style.css';
+import { useAppDispatch } from './app/hooks';
+import { initialize } from './features/Map/mapSlice';
 
 function App() {
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const map = L.map('map-id', { zoomControl: false }).setView([50, 40], 3);
+    const shapeList = [];
 
     fetch('/shapes.json')
       .then((response) => response.json())
-      .then((shapes) =>
+      .then((shapes) => {
         shapes.forEach(
           ({
             properties: { id, name },
@@ -27,9 +32,15 @@ function App() {
                 console.error(`Неизвестный тип фигуры: ${shapeType}`);
                 break;
             }
+            shapeList.push({
+              id,
+              name,
+              mapLayer: shape,
+            });
           }
-        )
-      );
+        );
+        dispatch(initialize({value: map, shapes: shapeList}));
+      });
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:

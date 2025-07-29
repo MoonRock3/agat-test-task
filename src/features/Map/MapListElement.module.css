@@ -1,0 +1,16 @@
+.mapListElement{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1vw;
+}
+
+.mapListElement__button > button {
+    background-color: rgb(202, 0, 0);
+    width: 6vw;
+    height: 3vh;
+    border: 0px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}

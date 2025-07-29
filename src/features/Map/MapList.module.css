@@ -1,0 +1,9 @@
+.mapList{
+    position: fixed;
+    height: 50vh;
+    width: 20vw;
+    min-width: 200px;
+    background-color: white;
+    z-index: 500;
+    margin: 1vw;
+}

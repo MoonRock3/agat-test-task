@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './style.css';
 import { useAppDispatch } from './app/hooks';
 import { initialize } from './features/Map/mapSlice';
+import { MapList } from "./features/Map/MapList";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -20,13 +21,13 @@ function App() {
             properties: { id, name },
             geometry: { coordinates, type: shapeType },
           }) => {
-            let shape = null;
+            let mapLayer = null;
             switch (shapeType) {
               case 'Polygon':
-                shape = L.polygon(coordinates[0]).addTo(map);
+                mapLayer = L.polygon(coordinates[0]).addTo(map);
                 break;
               case 'Point':
-                shape = L.marker(coordinates).addTo(map);
+                mapLayer = L.marker(coordinates).addTo(map);
                 break;
               default:
                 console.error(`Неизвестный тип фигуры: ${shapeType}`);
@@ -35,11 +36,11 @@ function App() {
             shapeList.push({
               id,
               name,
-              mapLayer: shape,
+              mapLayer,
             });
           }
         );
-        dispatch(initialize({value: map, shapes: shapeList}));
+        dispatch(initialize({ value: map, shapes: shapeList }));
       });
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -48,7 +49,11 @@ function App() {
     }).addTo(map);
   }, []);
 
-  return <div id="map-id"></div>;
+  return (
+    <div id="map-id">
+      <MapList />
+    </div>
+  );
 }
 
 export default App;

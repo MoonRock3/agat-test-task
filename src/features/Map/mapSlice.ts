@@ -22,10 +22,20 @@ export const mapSlice = createSlice({
       state.shapes.push(action.payload);
       action.payload?.mapLayer.addTo(state.value);
     },
+    /**
+     * Удаление фигуры с карты по id
+     * @param state текущее состояние
+     * @param action объект действия. Хранит id.
+     */
+    remove: (state, action: PayloadAction<number>) => {
+      const shapeToRemove = state.shapes.find(shape => shape?.id === action.payload);
+      shapeToRemove?.mapLayer.removeFrom(state.value);
+      state.shapes = state.shapes.filter(shape => shape?.id !== shapeToRemove?.id);
+    }
   },
 });
 
-export const { initialize, add } = mapSlice.actions;
+export const { initialize, add, remove } = mapSlice.actions;
 export default mapSlice.reducer;
 
 export const selectMap = (state: RootState) => state.map.value;

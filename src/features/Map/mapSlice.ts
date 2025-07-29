@@ -38,5 +38,4 @@ export const mapSlice = createSlice({
 export const { initialize, add, remove } = mapSlice.actions;
 export default mapSlice.reducer;
 
-export const selectMap = (state: RootState) => state.map.value;
 export const selectShapes = (state: RootState) => state.map.shapes;

@@ -1,0 +1,1 @@
+Проект основан на [примере из документации Redux](https://redux.js.org/tutorials/essentials/part-2-app-structure).

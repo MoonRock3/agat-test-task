@@ -1,11 +1,12 @@
-.mapList{
-    position: fixed;
-    height: 55vh;
-    width: 20vw;
-    min-width: 200px;
-    background-color: white;
-    z-index: 500;
-    top: 1vh;
-    left: 1vw;
-    overflow-y: auto;
+.mapList {
+  position: fixed;
+  height: 55vh;
+  width: 20vw;
+  min-width: 200px;
+  background-color: white;
+  z-index: 500;
+  top: 1vh;
+  left: 1vw;
+  overflow-y: auto;
+  border-radius: 5px;
 }

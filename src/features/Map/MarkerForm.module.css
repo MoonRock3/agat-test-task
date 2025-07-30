@@ -7,6 +7,7 @@
   background-color: white;
   bottom: 1vh;
   left: 1vw;
+  border-radius: 5px;
 }
 
 .markerForm__form > fieldset {
@@ -30,6 +31,11 @@
 }
 
 .markerForm__form button {
-  padding: 5px 10px;
+  padding: 10px;
   margin-bottom: 2vh;
+  background-color: rgb(17, 0, 253);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
 }

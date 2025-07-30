@@ -1,0 +1,35 @@
+.markerForm {
+  position: fixed;
+  min-height: 200px;
+  width: 20vw;
+  min-width: 300px;
+  z-index: 500;
+  background-color: white;
+  bottom: 1vh;
+  left: 1vw;
+}
+
+.markerForm__form > fieldset {
+  margin: 1vw;
+  display: flex;
+}
+
+.markerForm__form input {
+  flex: 1;
+  margin: 3px;
+  border: none;
+}
+
+.markerForm__form input:focus {
+  outline: none;
+}
+
+.markerForm__form > div {
+  display: flex;
+  justify-content: center;
+}
+
+.markerForm__form button {
+  padding: 5px 10px;
+  margin-bottom: 2vh;
+}

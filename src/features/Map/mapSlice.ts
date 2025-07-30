@@ -4,8 +4,8 @@ import L from 'leaflet';
 import { RootState } from '../../app/store';
 
 export interface MapState {
-  value: typeof L.Map | null
-  shapes: Array<Shape | null>
+  value: typeof L.Map | null;
+  shapes: Array<Shape | null>;
 }
 
 const initialState: MapState = { value: null, shapes: [] };
@@ -18,9 +18,18 @@ export const mapSlice = createSlice({
       state.value = action.payload.value;
       state.shapes = action.payload.shapes;
     },
-    add: (state, action: PayloadAction<Shape | null>) => {
-      state.shapes.push(action.payload);
-      action.payload?.mapLayer.addTo(state.value);
+    add: (state, action: PayloadAction<object>) => {
+      if (!state.value) {
+        return;
+      }
+      const shapeInfo = action.payload;
+      const shape: Shape = {
+        id: Date.now(),
+        name: shapeInfo.name,
+        mapLayer: L.marker(shapeInfo.coordinates).addTo(state.value),
+      };
+
+      state.shapes.push(shape);
     },
     /**
      * Удаление фигуры с карты по id
@@ -28,10 +37,14 @@ export const mapSlice = createSlice({
      * @param action объект действия. Хранит id.
      */
     remove: (state, action: PayloadAction<number>) => {
-      const shapeToRemove = state.shapes.find(shape => shape?.id === action.payload);
+      const shapeToRemove = state.shapes.find(
+        (shape) => shape?.id === action.payload
+      );
       shapeToRemove?.mapLayer.removeFrom(state.value);
-      state.shapes = state.shapes.filter(shape => shape?.id !== shapeToRemove?.id);
-    }
+      state.shapes = state.shapes.filter(
+        (shape) => shape?.id !== shapeToRemove?.id
+      );
+    },
   },
 });
 

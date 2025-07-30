@@ -5,7 +5,7 @@ import './style.css';
 import { useAppDispatch } from './app/hooks';
 import { initialize } from './features/Map/mapSlice';
 import MapList from './features/Map/MapList';
-import { MapList } from './features/Map/MapList';
+import MarkerForm from './features/Map/MarkerForm';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ function App() {
     <div>
       <div id="map-id"></div>
       <MapList />
-      
+      <MarkerForm />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Shape } from '../../app/shape';
 import L from 'leaflet';
 import { RootState } from '../../app/store';
@@ -6,18 +6,15 @@ import { RootState } from '../../app/store';
 export interface MapState {
   value: typeof L.Map | null;
   shapes: Array<Shape | null>;
+  status: 'idle' | 'loading' | 'failed';
 }
 
-const initialState: MapState = { value: null, shapes: [] };
+const initialState: MapState = { value: null, shapes: [], status: 'idle' };
 
 export const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    initialize: (state, action: PayloadAction<MapState>) => {
-      state.value = action.payload.value;
-      state.shapes = action.payload.shapes;
-    },
     add: (state, action: PayloadAction<object>) => {
       if (!state.value) {
         return;
@@ -46,9 +43,64 @@ export const mapSlice = createSlice({
       );
     },
   },
+  extraReducers(builder) {
+    builder
+      .addCase(initializeAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(initializeAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.value = action.payload.map;
+        state.shapes = action.payload.shapeList;
+      })
+      .addCase(initializeAsync.rejected, (state) => {
+        state.status = 'failed';
+      });
+  },
 });
 
-export const { initialize, add, remove } = mapSlice.actions;
+export const { add, remove } = mapSlice.actions;
 export default mapSlice.reducer;
 
 export const selectShapes = (state: RootState) => state.map.shapes;
+
+export const initializeAsync = createAsyncThunk('map/fetchShapes', async () => {
+  const map = L.map('map-id', { zoomControl: false }).setView([50, 40], 3);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  const shapes = await fetch('/shapes.json')
+    .then((response) => response.json())
+    .catch((reason) => {
+      console.error(reason);
+      alert('Не удалось загрузить метки!');
+    });
+  const shapeList: Shape[] = [];
+  shapes.forEach(
+    ({
+      properties: { id, name },
+      geometry: { coordinates, type: shapeType },
+    }) => {
+      let mapLayer = null;
+      switch (shapeType) {
+        case 'Polygon':
+          mapLayer = L.polygon(coordinates[0]).addTo(map);
+          break;
+        case 'Point':
+          mapLayer = L.marker(coordinates).addTo(map);
+          break;
+        default:
+          console.error(`Неизвестный тип фигуры: ${shapeType}`);
+          return;
+      }
+      shapeList.push({
+        id,
+        name,
+        mapLayer,
+      });
+    }
+  );
+  return { map, shapeList };
+});

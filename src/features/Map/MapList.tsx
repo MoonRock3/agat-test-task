@@ -5,7 +5,7 @@ import { selectShapes } from './mapSlice';
 import styles from './MapList.module.css';
 import { MapListElement } from './MapListElement';
 
-export function MapList() {
+export default function MapList() {
   const dispatch = useAppDispatch();
   const shapes = useSelector(selectShapes);
 

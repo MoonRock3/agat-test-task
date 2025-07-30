@@ -1,9 +1,11 @@
 .mapList{
     position: fixed;
-    height: 50vh;
+    height: 55vh;
     width: 20vw;
     min-width: 200px;
     background-color: white;
     z-index: 500;
-    margin: 1vw;
+    top: 1vh;
+    left: 1vw;
+    overflow-y: auto;
 }

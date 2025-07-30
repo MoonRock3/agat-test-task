@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './style.css';
 import { useAppDispatch } from './app/hooks';
 import { initialize } from './features/Map/mapSlice';
+import MapList from './features/Map/MapList';
 import { MapList } from './features/Map/MapList';
 
 function App() {
@@ -51,7 +52,8 @@ function App() {
   }, []);
 
   return (
-    <div id="map-id">
+    <div>
+      <div id="map-id"></div>
       <MapList />
       
     </div>
